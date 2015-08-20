@@ -190,6 +190,9 @@ public int nextCreature()
 
     if (allowedCreatures.size() == 0 && !kindByDifficulty)
         return kind;
+    
+//    private final String[] kinds = {"g", "gw", "gk", "gkw", "rk", "rkw", "s", "sw", "gww"};
+
 
     if (kindByDifficulty)
     {
@@ -199,9 +202,25 @@ public int nextCreature()
             kind = this.getCreatureType("g");
         } else if (difficulty < 3)
         {
-            String type = kinds[this.nextInt(6)];
+        	int[] ens = {0, 2, 4};
+            String type = kinds[ens[this.nextInt(ens.length)]];
             kind = this.getCreatureType(type);
-        }
+        } else if (difficulty < 5)
+        {
+        	int[] ens = {0, 1, 2, 4, 6};
+            String type = kinds[ens[this.nextInt(ens.length)]];
+            kind = this.getCreatureType(type);
+        } else if (difficulty < 6)
+        {
+        	int[] ens = {0, 1, 2, 3, 4, 5, 6};
+            String type = kinds[ens[this.nextInt(ens.length)]];
+            kind = this.getCreatureType(type);
+        } else if (difficulty < 8)
+        {
+        	int[] ens = {0, 1, 2, 3, 4, 5, 6, 7};
+            String type = kinds[ens[this.nextInt(ens.length)]];
+            kind = this.getCreatureType(type);
+        } 
     } else
     {
         Object[] localKinds = allowedCreatures.toArray();

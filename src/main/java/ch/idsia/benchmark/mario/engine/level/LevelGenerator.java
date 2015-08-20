@@ -318,23 +318,59 @@ private static int buildZone(int x, int maxLength, int maxHeight, int floor, int
             }
         }
     }
+    
+    /**
+     * EDit by montywest
+     * 
+     * Suspected bug, previously was added enemies to 0 length zones
+     * New algorithm scales enemies more gently
+     */
+    if (length != 0) {
+	    int heads = 0;
+	    int flips = length - 1;
+	    for (int flip = 0; flip < flips; flip++) {
+	    	int chance = (int)2.5d*(levelDifficulty+4);
+	    	if (chance > creaturesRandom.nextInt(100)) {
+	    		heads++;
+	    	}
+	    }
+	
+	    int crCount = 0;
+	    int tries = 0;
+	    int yy = level.height;
+	    while(crCount != heads && tries < 50) {
+	    	int yTries = 0;
+	    	boolean added = false;
+	    	while (!added && yTries < 4) {
+		    	int dx = creaturesRandom.nextInt(length);
+		    	int xx = x+dx;
+		    	if (level.getBlock(xx, yy) == 0 &&
+		    		level.getSpriteTemplate(xx, yy) == null) {
+		    		addEnemy(xx, yy);
+		            ++crCount;
+		            added = true;
+		    	} else {
+		    		yTries++;
+		    	}
+	    	}
+	    	yy--;
+		    tries++;
+	    }
+	    
 
-    int crCount = 0;
-//    for (int y = level.height - 3; y > levelDifficulty + 1; --y)
-//    {
-//        addEnemy(x, y);
-//        ++crCount;
-//    }
-    for (int yy = level.height; yy > 0; yy--)
-        if (level.getBlock(x, yy) == 0 &&
-                creaturesRandom.nextInt(levelDifficulty + 1) + 1 > (levelDifficulty + 1) / 2 &&
-                crCount < levelDifficulty + 1 &&
-                level.getSpriteTemplate(x, yy) == null)
-        {
-            addEnemy(x, yy);
-            ++crCount;
-        }
+//	    for (int yy = level.height; yy > 0; yy--)
+//	        if (level.getBlock(x, yy) == 0 &&
+//	                creaturesRandom.nextInt(levelDifficulty + 1) + 1 > (levelDifficulty + 1) / 2 &&
+//	                crCount < levelDifficulty + 1 &&
+//	                level.getSpriteTemplate(x, yy) == null)
+//	        {
+//	            addEnemy(x, yy);
+//	            ++crCount;
+//	        }
+//	    System.out.println("Length-" + length + " Enemies-" + crCount);
+    }
 
+    
     if (levelType > 0)
         buildCeiling(x, length);
 
@@ -743,7 +779,7 @@ private static int buildHill(int x0, boolean withStraight, int maxLength, int vf
                     }
                 }
             }
-            addEnemy(xx0, top - 1);
+//            addEnemy(xx0, top - 1);
         }
     }
 
