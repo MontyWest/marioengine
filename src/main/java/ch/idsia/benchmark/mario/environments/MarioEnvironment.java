@@ -654,7 +654,7 @@ private void computeEvaluationInfo()
 //     evaluationInfo.totalLengthOfLevelCells = levelScene.level.getWidthCells();
 //     evaluationInfo.totalLengthOfLevelPhys = levelScene.level.getWidthPhys();
     evaluationInfo.timeSpent = levelScene.getTimeSpent();
-    evaluationInfo.timeLeft = levelScene.getTimeLeft();
+    evaluationInfo.timeLeft = levelScene.getMarioStatus() == 1 ? levelScene.getTimeLeft() : 0;
     evaluationInfo.coinsGained = Mario.coins;
     evaluationInfo.totalNumberOfCoins = levelScene.level.counters.coinsCount;
     evaluationInfo.totalNumberOfHiddenBlocks = levelScene.level.counters.hiddenBlocksCount;
