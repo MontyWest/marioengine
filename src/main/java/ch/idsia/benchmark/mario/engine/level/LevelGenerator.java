@@ -28,6 +28,7 @@
 
 package ch.idsia.benchmark.mario.engine.level;
 
+import bsh.This;
 import ch.idsia.benchmark.mario.engine.sprites.Sprite;
 import ch.idsia.tools.MarioAIOptions;
 import ch.idsia.tools.RandomCreatureGenerator;
@@ -551,10 +552,29 @@ private static void buildLadder(int x0, int floor, int maxHeight)
     level.setBlock(x0, floor - ladderHeight, (byte) (13 + 5 * 16));
 }
 
+private static int getGapLength(int ld) {
+	double m = 0.02d;
+	double a = 0.4d;
+	int maxL = 3;
+	if (ld >= 0 && ld <= 3)
+		maxL = 3;
+	else if (ld <= 6)
+		maxL = 4;
+	else if (ld <= 10)
+		maxL = 6;
+	else if (ld <= 15)
+		maxL = 9;
+	else
+		maxL = 10;
+	
+	int calcL = 2 + ((int) Math.ceil(globalRandom.nextInt(ld+1) * ((m*ld) + a)));
+	return Math.min(maxL, calcL);
+}
+
 private static int buildGap(int xo, int maxLength, int maxHeight, int vfloor, int floorHeight)
 {
     int gs = globalRandom.nextInt(5) + 2; //GapStairs
-    int gl = globalRandom.nextInt(levelDifficulty) + levelDifficulty > 7 ? 10 : 3;//globalRandom.nextInt(2) + 2; //GapLength
+    int gl = getGapLength(levelDifficulty); //GapLength
     int length = gs * 2 + gl;
 
     if (length > maxLength)
