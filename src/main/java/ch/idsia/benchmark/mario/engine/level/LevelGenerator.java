@@ -326,9 +326,23 @@ private static int buildZone(int x, int maxLength, int maxHeight, int floor, int
      * Suspected bug, previously was added enemies to 0 length zones
      * New algorithm scales enemies more gently
      */
-    if (length != 0) {
+    addZonalEnemies(length, x);
+
+    
+    if (levelType > 0)
+        buildCeiling(x, length);
+
+    return length;
+}
+
+/***
+ * @author montywest
+ * Public for testing
+ */
+public static void addZonalEnemies(int zoneLength, int zoneStart) {
+	if (zoneLength != 0) {
 	    int heads = 0;
-	    int flips = length - 1;
+	    int flips = zoneLength - 1;
 	    for (int flip = 0; flip < flips; flip++) {
 	    	int chance = (int)2.5d*(levelDifficulty+4);
 	    	if (chance > creaturesRandom.nextInt(100)) {
@@ -344,7 +358,7 @@ private static int buildZone(int x, int maxLength, int maxHeight, int floor, int
 	    	boolean added = false;
 	    	while (!added && yTries < 4) {
 		    	int dx = creaturesRandom.nextInt(length);
-		    	int xx = x+dx;
+		    	int xx = zoneStart+dx;
 		    	if (level.getBlock(xx, yy) == 0 &&
 		    		level.getSpriteTemplate(xx, yy) == null) {
 		    		addEnemy(xx, yy);
@@ -370,12 +384,6 @@ private static int buildZone(int x, int maxLength, int maxHeight, int floor, int
 //	        }
 //	    System.out.println("Length-" + length + " Enemies-" + crCount);
     }
-
-    
-    if (levelType > 0)
-        buildCeiling(x, length);
-
-    return length;
 }
 
 private static void buildCeiling(int x0, int length)
@@ -552,7 +560,11 @@ private static void buildLadder(int x0, int floor, int maxHeight)
     level.setBlock(x0, floor - ladderHeight, (byte) (13 + 5 * 16));
 }
 
-private static int getGapLength(int ld) {
+/***
+ * @author montywest
+ * Public for testing
+ */
+public static int getGapLength(int ld) {
 	double m = 0.02d;
 	double a = 0.4d;
 	int maxL = 3;
@@ -575,6 +587,7 @@ private static int buildGap(int xo, int maxLength, int maxHeight, int vfloor, in
 {
     int gs = globalRandom.nextInt(5) + 2; //GapStairs
     int gl = getGapLength(levelDifficulty); //GapLength
+//    System.out.println("LD: " + levelDifficulty + " - GapLength: " + gl);
     int length = gs * 2 + gl;
 
     if (length > maxLength)
