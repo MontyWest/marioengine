@@ -341,14 +341,16 @@ private static int buildZone(int x, int maxLength, int maxHeight, int floor, int
  */
 public static void addZonalEnemies(int zoneLength, int zoneStart) {
 	if (zoneLength != 0) {
+
 	    int heads = 0;
 	    int flips = zoneLength - 1;
+	    int chance = (int)2.5d*(levelDifficulty+4);
 	    for (int flip = 0; flip < flips; flip++) {
-	    	int chance = (int)2.5d*(levelDifficulty+4);
 	    	if (chance > creaturesRandom.nextInt(100)) {
 	    		heads++;
 	    	}
 	    }
+	    
 	
 	    int crCount = 0;
 	    int tries = 0;
@@ -357,7 +359,7 @@ public static void addZonalEnemies(int zoneLength, int zoneStart) {
 	    	int yTries = 0;
 	    	boolean added = false;
 	    	while (!added && yTries < 4) {
-		    	int dx = creaturesRandom.nextInt(length);
+		    	int dx = creaturesRandom.nextInt(zoneLength);
 		    	int xx = zoneStart+dx;
 		    	if (level.getBlock(xx, yy) == 0 &&
 		    		level.getSpriteTemplate(xx, yy) == null) {
@@ -371,7 +373,6 @@ public static void addZonalEnemies(int zoneLength, int zoneStart) {
 	    	yy--;
 		    tries++;
 	    }
-	    
 
 //	    for (int yy = level.height; yy > 0; yy--)
 //	        if (level.getBlock(x, yy) == 0 &&
